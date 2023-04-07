@@ -2,6 +2,11 @@
   <div>
     <h1>Lotto Simulator</h1>
     <div>
+      <section style="border: 1px solid #a5d9c8">
+        <p>number of tickets: {{ nrOfTickets }}</p>
+        <p>years spent: {{ Math.floor(timeSpent / 365) }}</p>
+        <p>cost of tickets: {{ costOfTickets }} Ft</p>
+      </section>
       <p>Winning Numbers:</p>
       <ul>
         <li v-for="num in randomNumbers" :key="num">{{ num }}</li>
@@ -55,6 +60,7 @@
       <h3>5 matches</h3>
       <h3>{{ fiveMatches }}</h3>
     </div>
+    <button @click="randomizeUserNumbers">Randomize Users' Numbers</button>
   </div>
 </template>
 
@@ -71,17 +77,23 @@ export default defineComponent({
     let threeMatches = ref<number>(0);
     let fourMatches = ref<number>(0);
     let fiveMatches = ref<number>(0);
+    let nrOfTickets = ref<number>(0);
+    let costOfTickets = ref<number>(0);
+    let timeSpent = ref<number>(0);
 
     function generateRandomNumbers() {
       const nums: number[] = [];
       while (nums.length < 5) {
-        const num = Math.floor(Math.random() * 91);
+        const num = Math.ceil(Math.random() * 91);
         if (!nums.includes(num)) {
           nums.push(num);
         }
       }
       randomNumbers.value = nums;
       checkUserNumbers(nums, userNumbers.value);
+      nrOfTickets.value++;
+      costOfTickets.value = costOfTickets.value + 300;
+      timeSpent.value = timeSpent.value + 7;
     }
 
     function checkUserNumbers(randomNumbers: number[], userNumbers: number[]) {
@@ -106,13 +118,20 @@ export default defineComponent({
       }
     }
 
+    function randomizeUserNumbers() {
+      const newUserNumbers = Array.from({ length: 5 }, () =>
+        Math.floor(Math.random() * 90)
+      );
+      userNumbers.value = newUserNumbers;
+    }
+
     watch(interval, (newValue, oldValue) => {
       if (oldValue) {
         clearInterval(intervalId.value);
       }
       intervalId.value = setInterval(() => {
         generateRandomNumbers();
-      }, newValue);
+      }, newValue ?? 0);
     });
 
     const intervalId = ref<number | null>(null);
@@ -122,11 +141,15 @@ export default defineComponent({
     return {
       randomNumbers,
       userNumbers,
+      randomizeUserNumbers,
       interval,
       twoMatches,
       threeMatches,
       fourMatches,
       fiveMatches,
+      nrOfTickets,
+      costOfTickets,
+      timeSpent,
     };
   },
 });
