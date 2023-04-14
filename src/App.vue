@@ -1,85 +1,216 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import { defineComponent, ref, watch } from "vue";
+
+export default defineComponent({
+  name: "LotterySimulator",
+  setup() {
+    const randomNumbers = ref<number[]>([]);
+    const userNumbers = ref<number[]>([1, 2, 3, 4, 5]);
+    const interval = ref<number>(100);
+    let twoMatches = ref<number>(0);
+    let threeMatches = ref<number>(0);
+    let fourMatches = ref<number>(0);
+    let fiveMatches = ref<number>(0);
+    let nrOfTickets = ref<number>(0);
+    let costOfTickets = ref<number>(0);
+    let timeSpent = ref<number>(0);
+
+    function generateRandomNumbers() {
+      const nums: number[] = [];
+      while (nums.length < 5) {
+        const num = Math.ceil(Math.random() * 91);
+        if (!nums.includes(num)) {
+          nums.push(num);
+        }
+      }
+      randomNumbers.value = nums;
+      checkUserNumbers(nums, userNumbers.value);
+      nrOfTickets.value++;
+      costOfTickets.value = costOfTickets.value + 300;
+      timeSpent.value = timeSpent.value + 7;
+    }
+
+    function checkUserNumbers(randomNumbers: number[], userNumbers: number[]) {
+      let count = 0;
+      for (let i = 0; i < randomNumbers.length; i++) {
+        if (userNumbers.includes(randomNumbers[i])) {
+          count++;
+
+          if (count === 2) {
+            twoMatches.value++;
+          }
+          if (count === 3) {
+            threeMatches.value++;
+          }
+          if (count === 4) {
+            fourMatches.value++;
+          }
+          if (count === 5) {
+            fiveMatches.value++;
+          }
+        }
+      }
+    }
+
+    function randomizeUserNumbers() {
+      const newUserNumbers = Array.from({ length: 5 }, () =>
+        Math.floor(Math.random() * 90)
+      );
+      userNumbers.value = newUserNumbers;
+    }
+
+    watch(interval, (newValue, oldValue) => {
+      if (oldValue) {
+        clearInterval(intervalId.value);
+      }
+      intervalId.value = setInterval(() => {
+        generateRandomNumbers();
+      }, newValue ?? 0);
+    });
+
+    const intervalId = ref<number | null>(null);
+
+    generateRandomNumbers();
+
+    return {
+      randomNumbers,
+      userNumbers,
+      randomizeUserNumbers,
+      interval,
+      twoMatches,
+      threeMatches,
+      fourMatches,
+      fiveMatches,
+      nrOfTickets,
+      costOfTickets,
+      timeSpent,
+    };
+  },
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div class="min-h-screen bg-gray-100 px-4">
+    <main class="max-w-lg mx-auto py-6">
+      <!-- Title section -->
+      <div
+        class="flex grow-0 justify-middle items-center gap-4 mb-4 p-4 bg-gradient-to-r from-mito-green to-mito-yellow text-white"
+      >
+        <img class="inline h-8 w-8" src="./assets/Mito1.png" alt="logo" />
+        <h2 class="text-xl font-bold text-left inline -mt-1">Lottery Simulator</h2>
+      </div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <!-- Stats section -->
+      <section class="w-11/12 m-auto bg-white p-4 drop-shadow-xl">
+        <h1 class="text-3xl font-bold mb-4">Result</h1>
+        <div class="bg-mint text-white rounded-lg p-4 mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-lg font-semibold">Number of tickets:</div>
+            <div class="text-xl font-bold">{{ nrOfTickets }}</div>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-lg font-semibold">Years spent:</div>
+            <div class="text-xl font-bold">
+              {{ Math.floor(timeSpent / 365) }}
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="text-lg font-semibold">Cost of tickets</div>
+            <div class="text-xl font-bold">{{ costOfTickets }} Ft</div>
+          </div>
+        </div>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+        <!-- Grid section -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 drop-shadow-sm">
+          <div
+            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+          >
+            <div class="text-lg font-semibold text-gray-800">2 matches</div>
+            <div class="text-xl font-bold text-gray-800">100</div>
+          </div>
+          <div
+            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+          >
+            <div class="text-lg font-semibold text-gray-800">3 matches</div>
+            <div class="text-xl font-bold text-gray-800">200</div>
+          </div>
+          <div
+            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+          >
+            <div class="text-lg font-semibold text-gray-800">4 matches</div>
+            <div class="text-xl font-bold text-gray-800">300</div>
+          </div>
+          <div
+            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+          >
+            <div class="text-lg font-semibold text-gray-800">5 matches</div>
+            <div class="text-xl font-bold text-gray-800">400</div>
+          </div>
+        </div>
+        <!-- Numbers section -->
+        <div class="flex flex-wrap items-center justify-space-around gap-4 pt-4 w-full">
+          <p class="inline font-semibold">Winning numbers:</p>
+          <ul class="flex flex-wrap gap-4">
+            <li
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1"
+              v-for="num in randomNumbers"
+              :key="num"
+            >
+              {{ num }}
+            </li>
+          </ul>
+        </div>
+        <div class="flex flex-wrap items-center justify-space-around gap-4 pt-4 w-full">
+          <p class="inline font-semibold">Your numbers:</p>
+          <div>
+            <input
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
+              type="number"
+              min="1"
+              id="num1"
+              v-model.number="userNumbers[0]"
+            />
+          </div>
+          <div>
+            <input
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
+              type="number"
+              min="1"
+              id="num2"
+              v-model.number="userNumbers[1]"
+            />
+          </div>
+          <div>
+            <input
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
+              type="number"
+              min="1"
+              id="num3"
+              v-model.number="userNumbers[2]"
+            />
+          </div>
+          <div>
+            <input
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
+              type="number"
+              min="1"
+              id="num4"
+              v-model.number="userNumbers[3]"
+            />
+          </div>
+          <div>
+            <input
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
+              type="number"
+              min="1"
+              id="num5"
+              v-model.number="userNumbers[4]"
+            />
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+<style scoped></style>
