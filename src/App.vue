@@ -126,33 +126,33 @@ export default defineComponent({
             class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">2 matches</div>
-            <div class="text-xl font-bold text-gray-800">100</div>
+            <div class="text-xl font-bold text-gray-800">{{ twoMatches }}</div>
           </div>
           <div
             class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">3 matches</div>
-            <div class="text-xl font-bold text-gray-800">200</div>
+            <div class="text-xl font-bold text-gray-800">{{ threeMatches }}</div>
           </div>
           <div
             class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">4 matches</div>
-            <div class="text-xl font-bold text-gray-800">300</div>
+            <div class="text-xl font-bold text-gray-800">{{ fourMatches }}</div>
           </div>
           <div
             class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">5 matches</div>
-            <div class="text-xl font-bold text-gray-800">400</div>
+            <div class="text-xl font-bold text-gray-800">{{ fiveMatches }}</div>
           </div>
         </div>
         <!-- Numbers section -->
-        <div class="flex flex-wrap items-center justify-space-around gap-4 pt-4 w-full">
+        <div class="flex flex-wrap items-center justify-around gap-4 pt-4 w-full">
           <p class="inline font-semibold">Winning numbers:</p>
           <ul class="flex flex-wrap gap-4">
             <li
-              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1"
+              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-8 bg-white text-center"
               v-for="num in randomNumbers"
               :key="num"
             >
@@ -160,54 +160,39 @@ export default defineComponent({
             </li>
           </ul>
         </div>
-        <div class="flex flex-wrap items-center justify-space-around gap-4 pt-4 w-full">
+        <div class="flex flex-wrap items-center justify-around gap-4 pt-4 w-full">
           <p class="inline font-semibold">Your numbers:</p>
-          <div>
-            <input
-              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
-              type="number"
-              min="1"
-              id="num1"
-              v-model.number="userNumbers[0]"
-            />
-          </div>
-          <div>
-            <input
-              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
-              type="number"
-              min="1"
-              id="num2"
-              v-model.number="userNumbers[1]"
-            />
-          </div>
-          <div>
-            <input
-              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
-              type="number"
-              min="1"
-              id="num3"
-              v-model.number="userNumbers[2]"
-            />
-          </div>
-          <div>
-            <input
-              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
-              type="number"
-              min="1"
+
+          <div class="flex flex-wrap gap-4">
+            <p
+              class="inline drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-8 bg-white text-center"
+            >
+              {{ userNumbers[0] }}
+            </p>
+            <p
+              class="inline drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-8 bg-white text-center"
+            >
+              {{ userNumbers[1] }}
+            </p>
+            <p
+              class="inline drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-8 bg-white text-center"
+            >
+              {{ userNumbers[2] }}
+            </p>
+            <p
+              class="inline drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-8 bg-white text-center"
               id="num4"
-              v-model.number="userNumbers[3]"
-            />
-          </div>
-          <div>
-            <input
-              class="drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-12"
-              type="number"
-              min="1"
-              id="num5"
-              v-model.number="userNumbers[4]"
-            />
+            >
+              {{ userNumbers[3] }}
+            </p>
+            <p
+              class="inline drop-shadow-md border-solid border-2 border-mito-green rounded p-1 w-8 bg-white text-center"
+            >
+              {{ userNumbers[4] }}
+            </p>
           </div>
         </div>
+        <button @click="randomizeUserNumbers">Randomize Users' Numbers</button>
       </section>
     </main>
   </div>
