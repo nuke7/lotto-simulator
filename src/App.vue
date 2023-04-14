@@ -192,7 +192,21 @@ export default defineComponent({
             </p>
           </div>
         </div>
-        <button @click="randomizeUserNumbers">Randomize Users' Numbers</button>
+        <button class="rounded-md bg-mito-green" @click="randomizeUserNumbers">
+          Randomize Users' Numbers
+        </button>
+        <div>
+          <label for="interval">Interval:</label>
+          <input
+            type="range"
+            id="interval"
+            min="10"
+            max="1000"
+            step="10"
+            v-model.number="interval"
+          />
+          <span>{{ interval }}ms</span>
+        </div>
       </section>
     </main>
   </div>
