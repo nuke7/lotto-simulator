@@ -102,7 +102,7 @@ export default defineComponent({
 
       <!-- Stats section -->
       <section class="w-11/12 m-auto bg-white p-4 drop-shadow-xl">
-        <h1 class="text-3xl font-bold mb-4">Result</h1>
+        <h1 class="text-3xl font-bold mb-8">Result</h1>
         <div class="bg-mint text-white rounded-lg p-4 mb-6">
           <div class="flex justify-between items-center mb-2">
             <div class="text-lg font-semibold">Number of tickets:</div>
@@ -116,39 +116,41 @@ export default defineComponent({
           </div>
           <div class="flex justify-between items-center">
             <div class="text-lg font-semibold">Cost of tickets</div>
-            <div class="text-xl font-bold">{{ costOfTickets }} Ft</div>
+            <div class="text-xl font-bold">
+              {{ new Intl.NumberFormat().format(costOfTickets) }} Ft
+            </div>
           </div>
         </div>
 
         <!-- Grid section -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 drop-shadow-sm">
           <div
-            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-tl-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">2 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ twoMatches }}</div>
           </div>
           <div
-            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-tr-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">3 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ threeMatches }}</div>
           </div>
           <div
-            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-bl-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">4 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ fourMatches }}</div>
           </div>
           <div
-            class="bg-white rounded-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-br-lg py-4 text-center border-solid border-2 border-mito-yellow"
           >
             <div class="text-lg font-semibold text-gray-800">5 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ fiveMatches }}</div>
           </div>
         </div>
         <!-- Numbers section -->
-        <div class="flex flex-wrap items-center justify-around gap-4 pt-4 w-full">
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full">
           <p class="inline font-semibold">Winning numbers:</p>
           <ul class="flex flex-wrap gap-4">
             <li
@@ -160,7 +162,7 @@ export default defineComponent({
             </li>
           </ul>
         </div>
-        <div class="flex flex-wrap items-center justify-around gap-4 pt-4 w-full">
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full">
           <p class="inline font-semibold">Your numbers:</p>
 
           <div class="flex flex-wrap gap-4">
@@ -193,11 +195,12 @@ export default defineComponent({
           </div>
         </div>
         <button class="rounded-md bg-mito-green" @click="randomizeUserNumbers">
-          Randomize Users' Numbers
+          Randomize User's Numbers
         </button>
         <div>
-          <label for="interval">Interval:</label>
+          <p class="font-semibold">Speed</p>
           <input
+            class="transparent w-full cursor-pointer appearance-none rounded-lg border-transparent bg-mito-green"
             type="range"
             id="interval"
             min="10"
@@ -212,4 +215,16 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+input[type="range"]::-webkit-slider-thumb,
+input[type="range"]::-moz-range-thumb {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: whitesmoke;
+  box-shadow: 0 0 2px 0 #555;
+  transition: background 0.3s ease-in-out;
+}
+</style>
