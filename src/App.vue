@@ -1,88 +1,86 @@
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+import { defineComponent, ref, watch, onMounted } from 'vue'
 
 export default defineComponent({
-  name: "LotterySimulator",
+  name: 'LotterySimulator',
   setup() {
-    const randomNumbers = ref<number[]>([]);
-    const initialSetValues = [1, 2, 3, 4, 5];
-    const userNumbers = ref(initialSetValues);
-    const interval = ref<number>(100);
-    let twoMatches = ref<number>(0);
-    let threeMatches = ref<number>(0);
-    let fourMatches = ref<number>(0);
-    let fiveMatches = ref<number>(0);
-    let nrOfTickets = ref<number>(0);
-    let costOfTickets = ref<number>(0);
-    let timeSpent = ref<number>(0);
+    const randomNumbers = ref<number[]>([])
+    const userNumbers = ref<number[]>([1, 2, 3, 4, 5])
+    const interval = ref<number>(100)
+    let twoMatches = ref<number>(0)
+    let threeMatches = ref<number>(0)
+    let fourMatches = ref<number>(0)
+    let fiveMatches = ref<number>(0)
+    let nrOfTickets = ref<number>(0)
+    let costOfTickets = ref<number>(0)
+    let timeSpent = ref<number>(0)
+    let is5matched = ref(false)
     // eslint-disable-next-line no-undef
-    const intervalId = ref<NodeJS.Timeout | undefined>(undefined);
+    const intervalId = ref<NodeJS.Timeout | undefined>(undefined)
 
     function generateRandomNumbers() {
-      const nums: number[] = [];
+      const nums: number[] = []
       while (nums.length < 5) {
-        const num = Math.ceil(Math.random() * 91);
+        const num = Math.ceil(Math.random() * 90)
         if (!nums.includes(num)) {
-          nums.push(num);
+          nums.push(num)
         }
       }
-      randomNumbers.value = nums;
-      checkUserNumbers(nums, Array.from(userNumbers.value));
-      nrOfTickets.value++;
-      costOfTickets.value = costOfTickets.value + 300;
-      timeSpent.value = timeSpent.value + 7;
+      randomNumbers.value = nums
+      checkUserNumbers(nums, userNumbers.value)
+      nrOfTickets.value++
+      costOfTickets.value = costOfTickets.value + 300
+      timeSpent.value = timeSpent.value + 7
     }
 
     function checkUserNumbers(randomNumbers: number[], userNumbers: number[]) {
-      let count = 0;
-      for (let i = 0; i < randomNumbers.length; i++) {
-        if (userNumbers.includes(randomNumbers[i])) {
-          count++;
+      const matchingNumbers = userNumbers.filter((num) => randomNumbers.includes(num))
+      const count = matchingNumbers.length
 
-          if (count === 2) {
-            twoMatches.value++;
-          }
-          if (count === 3) {
-            threeMatches.value++;
-          }
-          if (count === 4) {
-            fourMatches.value++;
-          }
-          if (count === 5) {
-            fiveMatches.value++;
-          }
-        }
+      if (count === 2) {
+        twoMatches.value++
+      }
+      if (count === 3) {
+        threeMatches.value++
+      }
+      if (count === 4) {
+        fourMatches.value++
+      }
+      if (count === 5) {
+        fiveMatches.value++
+        clearInterval(intervalId.value)
+        is5matched.value = true
       }
     }
 
     function randomizeUserNumbers() {
-      const nums: number[] = [];
+      const nums: number[] = []
       while (nums.length < 5) {
-        const num = Math.ceil(Math.random() * 91);
+        const num = Math.ceil(Math.random() * 90)
         if (!nums.includes(num)) {
-          nums.push(num);
+          nums.push(num)
         }
       }
-      userNumbers.value = nums;
+      userNumbers.value = nums
     }
 
     function startInterval() {
-      clearInterval(intervalId.value);
+      clearInterval(intervalId.value)
 
       intervalId.value = setInterval(() => {
-        generateRandomNumbers();
-      }, interval.value);
+        generateRandomNumbers()
+      }, interval.value)
     }
 
     watch(interval, () => {
-      startInterval();
-    });
+      startInterval()
+    })
 
     onMounted(() => {
       intervalId.value = setInterval(() => {
-        generateRandomNumbers();
-      }, interval.value);
-    });
+        generateRandomNumbers()
+      }, interval.value)
+    })
 
     return {
       randomNumbers,
@@ -96,9 +94,10 @@ export default defineComponent({
       nrOfTickets,
       costOfTickets,
       timeSpent,
-    };
-  },
-});
+      is5matched
+    }
+  }
+})
 </script>
 
 <template>
@@ -124,7 +123,13 @@ export default defineComponent({
           </div>
           <div class="flex justify-between items-center mb-2 gap-4">
             <div class="text-lg font-semibold">Years spent:</div>
-            <div class="text-xl font-bold w-6/12">
+            <div
+              class="w-6/12 text-xl font-bold"
+              :style="{
+                color: is5matched ? 'red' : 'white',
+                fontSize: is5matched ? '3em' : '1.25rem'
+              }"
+            >
               {{ Math.floor(timeSpent / 365) }}
             </div>
           </div>
@@ -164,9 +169,7 @@ export default defineComponent({
           </div>
         </div>
         <!-- Numbers section -->
-        <div
-          class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full sm:justify-start"
-        >
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full sm:justify-start">
           <p class="inline font-semibold">Winning numbers:</p>
           <ul class="flex flex-wrap gap-4">
             <li
@@ -223,7 +226,7 @@ export default defineComponent({
           <input
             type="range"
             id="interval"
-            min="10"
+            min="1"
             max="1000"
             step="10"
             v-model.number="interval"
@@ -239,7 +242,7 @@ export default defineComponent({
 $mito-green: #a5d9c8;
 $mito-yellow: #f4f0c6;
 
-input[type="range"] {
+input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
@@ -251,15 +254,15 @@ input[type="range"] {
   }
 }
 
-input[type="range"]::-webkit-slider-runnable-track,
-input[type="range"]::-moz-range-track {
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-moz-range-track {
   background: $mito-green;
   border-radius: 2rem;
   height: 1rem;
 }
 
-input[type="range"]::-webkit-slider-thumb,
-input[type="range"]::-moz-range-thumb {
+input[type='range']::-webkit-slider-thumb,
+input[type='range']::-moz-range-thumb {
   -webkit-appearance: none;
   -moz-appearance: none;
   height: 12px;
@@ -270,8 +273,8 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: 0 0 4px 0 $mito-green;
 }
 
-input[type="range"]:focus::-webkit-slider-thumb,
-input[type="range"]:focus::-moz-range-thumb {
+input[type='range']:focus::-webkit-slider-thumb,
+input[type='range']:focus::-moz-range-thumb {
   border: 1px solid $mito-green;
   outline: 3px solid $mito-yellow;
   outline-offset: 0.125rem;
