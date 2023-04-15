@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, onMounted } from "vue";
 
 export default defineComponent({
   name: "LotterySimulator",
@@ -15,6 +15,7 @@ export default defineComponent({
     let nrOfTickets = ref<number>(0);
     let costOfTickets = ref<number>(0);
     let timeSpent = ref<number>(0);
+    let intervalId = ref<number | undefined>(100);
 
     function generateRandomNumbers() {
       const nums: number[] = [];
@@ -70,12 +71,14 @@ export default defineComponent({
       }
       intervalId.value = setInterval(() => {
         generateRandomNumbers();
-      }, newValue ?? 0);
+      }, newValue ?? 100);
     });
 
-    const intervalId = ref<number | null>(null);
-
-    generateRandomNumbers();
+    onMounted(() => {
+      setInterval(() => {
+        generateRandomNumbers();
+      }, 100);
+    });
 
     return {
       randomNumbers,
@@ -110,7 +113,7 @@ export default defineComponent({
         class="w-11/12 max-w-4xl m-auto bg-white p-4 drop-shadow-xl rounded-sm sm:rounded-3xl"
       >
         <h1 class="text-3xl font-bold mb-8 sm:mt-8 sm:mb-10 sm:text-4xl">Result</h1>
-        <div class="bg-mint text-white rounded-lg p-4 mb-6 max-w-sm mx-auto sm:mx-1">
+        <div class="bg-mint text-white rounded-lg p-4 mb-6 max-w-md mx-auto sm:mx-1">
           <div class="flex justify-between items-center mb-2 gap-4">
             <div class="text-lg font-semibold">Number of tickets:</div>
             <div class="text-xl font-bold w-6/12">{{ nrOfTickets }}</div>
