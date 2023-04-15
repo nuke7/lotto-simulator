@@ -243,19 +243,13 @@ $mito-green: #a5d9c8;
 $mito-yellow: #f4f0c6;
 
 input[type='range'] {
-  -webkit-appearance: none;
   appearance: none;
-  background: transparent;
   cursor: pointer;
   width: 100%;
-  &:focus {
-    transition: all 5000 ease-in-out;
-    outline: none;
-  }
 }
 
-input[type='range']::-webkit-slider-runnable-track,
-input[type='range']::-moz-range-track {
+input[type='range']::-moz-range-track,
+input[type='range']::-webkit-slider-runnable-track {
   background: $mito-green;
   border-radius: 2rem;
   height: 1rem;
