@@ -248,17 +248,33 @@ input[type='range'] {
   width: 100%;
 }
 
-input[type='range']::-moz-range-track,
+input[type='range']::-moz-range-track {
+  background: $mito-green;
+  border-radius: 2rem;
+  height: 1rem;
+}
 input[type='range']::-webkit-slider-runnable-track {
   background: $mito-green;
   border-radius: 2rem;
   height: 1rem;
 }
 
-input[type='range']::-webkit-slider-thumb,
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin-top: 2px; /* Centers thumb on the track */
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  border: none;
+  background: whitesmoke;
+  box-shadow: 0 0 4px 0 $mito-green;
+}
 input[type='range']::-moz-range-thumb {
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
   height: 12px;
   width: 12px;
   border-radius: 50%;
@@ -267,7 +283,12 @@ input[type='range']::-moz-range-thumb {
   box-shadow: 0 0 4px 0 $mito-green;
 }
 
-input[type='range']:focus::-webkit-slider-thumb,
+input[type='range']:focus::-webkit-slider-thumb {
+  border: 1px solid $mito-green;
+  outline: 3px solid $mito-yellow;
+  outline-offset: 0.125rem;
+}
+
 input[type='range']:focus::-moz-range-thumb {
   border: 1px solid $mito-green;
   outline: 3px solid $mito-yellow;
