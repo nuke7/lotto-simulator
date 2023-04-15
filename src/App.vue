@@ -113,7 +113,7 @@ export default defineComponent({
 
       <!-- Stats section -->
       <section
-        class="w-11/12 max-w-4xl m-auto bg-white p-4 drop-shadow-xl rounded-sm sm:rounded-3xl"
+        class="w-11/12 max-w-4xl m-auto bg-white p-4 drop-shadow-xl rounded-sm sm:rounded-3xl sm:px-24"
       >
         <h1 class="text-3xl font-bold mb-8 sm:mt-8 sm:mb-10 sm:text-4xl">Result</h1>
         <div class="bg-mint text-white rounded-lg p-4 mb-6 max-w-md mx-auto sm:mx-1">
@@ -142,7 +142,7 @@ export default defineComponent({
         </div>
 
         <!-- Grid section -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 drop-shadow-sm max-w-lg">
+        <div class="grid grid-cols-2 sm:grid-cols-4 drop-shadow-sm max-w-lg mx-auto sm:mx-1">
           <div
             class="bg-white rounded-tl-lg py-4 text-center border-solid border-2 border-mito-yellow sm:rounded-l-lg"
           >
