@@ -5,7 +5,8 @@ export default defineComponent({
   name: "LotterySimulator",
   setup() {
     const randomNumbers = ref<number[]>([]);
-    const userNumbers = ref<number[]>([1, 2, 3, 4, 5]);
+    const initialSetValues = [1, 2, 3, 4, 5];
+    const userNumbers = ref(initialSetValues);
     const interval = ref<number>(100);
     let twoMatches = ref<number>(0);
     let threeMatches = ref<number>(0);
@@ -24,7 +25,7 @@ export default defineComponent({
         }
       }
       randomNumbers.value = nums;
-      checkUserNumbers(nums, userNumbers.value);
+      checkUserNumbers(nums, Array.from(userNumbers.value));
       nrOfTickets.value++;
       costOfTickets.value = costOfTickets.value + 300;
       timeSpent.value = timeSpent.value + 7;
@@ -53,10 +54,14 @@ export default defineComponent({
     }
 
     function randomizeUserNumbers() {
-      const newUserNumbers = Array.from({ length: 5 }, () =>
-        Math.floor(Math.random() * 90)
-      );
-      userNumbers.value = newUserNumbers;
+      const nums: number[] = [];
+      while (nums.length < 5) {
+        const num = Math.ceil(Math.random() * 91);
+        if (!nums.includes(num)) {
+          nums.push(num);
+        }
+      }
+      userNumbers.value = nums;
     }
 
     watch(interval, (newValue, oldValue) => {
@@ -90,67 +95,71 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 px-4">
-    <main class="max-w-lg mx-auto py-6">
+  <div class="min-h-screen bg-gray-100">
+    <main class="lg:w-full mx-auto pb-6">
       <!-- Title section -->
       <div
-        class="flex grow-0 justify-middle items-center gap-4 mb-4 p-4 bg-gradient-to-r from-mito-green to-mito-yellow text-white"
+        class="flex justify-middle items-center gap-4 mb-4 p-4 bg-gradient-to-r from-mito-green to-mito-yellow text-white lg:w-full"
       >
         <img class="inline h-8 w-8" src="./assets/Mito1.png" alt="logo" />
         <h2 class="text-xl font-bold text-left inline -mt-1">Lottery Simulator</h2>
       </div>
 
       <!-- Stats section -->
-      <section class="w-11/12 m-auto bg-white p-4 drop-shadow-xl">
-        <h1 class="text-3xl font-bold mb-8">Result</h1>
-        <div class="bg-mint text-white rounded-lg p-4 mb-6">
-          <div class="flex justify-between items-center mb-2">
+      <section
+        class="w-11/12 max-w-4xl m-auto bg-white p-4 drop-shadow-xl rounded-sm sm:rounded-3xl"
+      >
+        <h1 class="text-3xl font-bold mb-8 sm:mt-8 sm:mb-10 sm:text-4xl">Result</h1>
+        <div class="bg-mint text-white rounded-lg p-4 mb-6 max-w-sm mx-auto sm:mx-1">
+          <div class="flex justify-between items-center mb-2 gap-4">
             <div class="text-lg font-semibold">Number of tickets:</div>
-            <div class="text-xl font-bold">{{ nrOfTickets }}</div>
+            <div class="text-xl font-bold w-6/12">{{ nrOfTickets }}</div>
           </div>
-          <div class="flex justify-between items-center mb-2">
+          <div class="flex justify-between items-center mb-2 gap-4">
             <div class="text-lg font-semibold">Years spent:</div>
-            <div class="text-xl font-bold">
+            <div class="text-xl font-bold w-6/12">
               {{ Math.floor(timeSpent / 365) }}
             </div>
           </div>
-          <div class="flex justify-between items-center">
-            <div class="text-lg font-semibold">Cost of tickets</div>
-            <div class="text-xl font-bold">
+          <div class="flex justify-between items-center gap-4">
+            <div class="text-lg font-semibold">Cost of tickets:</div>
+            <div class="text-xl font-bold w-6/12">
               {{ new Intl.NumberFormat().format(costOfTickets) }} Ft
             </div>
           </div>
         </div>
 
         <!-- Grid section -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 drop-shadow-sm">
+        <div class="grid grid-cols-2 sm:grid-cols-4 drop-shadow-sm max-w-lg">
           <div
-            class="bg-white rounded-tl-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-tl-lg py-4 text-center border-solid border-2 border-mito-yellow sm:rounded-l-lg"
           >
             <div class="text-lg font-semibold text-gray-800">2 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ twoMatches }}</div>
           </div>
           <div
-            class="bg-white rounded-tr-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-tr-lg py-4 text-center border-solid border-2 border-mito-yellow sm:rounded-none"
           >
             <div class="text-lg font-semibold text-gray-800">3 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ threeMatches }}</div>
           </div>
           <div
-            class="bg-white rounded-bl-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-bl-lg py-4 text-center border-solid border-2 border-mito-yellow sm:rounded-none"
           >
             <div class="text-lg font-semibold text-gray-800">4 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ fourMatches }}</div>
           </div>
           <div
-            class="bg-white rounded-br-lg py-4 text-center border-solid border-2 border-mito-yellow"
+            class="bg-white rounded-br-lg py-4 text-center border-solid border-2 border-mito-yellow sm:rounded-r-lg"
           >
             <div class="text-lg font-semibold text-gray-800">5 matches</div>
             <div class="text-xl font-bold text-gray-800">{{ fiveMatches }}</div>
           </div>
         </div>
         <!-- Numbers section -->
-        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full">
+        <div
+          class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full sm:justify-start"
+        >
           <p class="inline font-semibold">Winning numbers:</p>
           <ul class="flex flex-wrap gap-4">
             <li
@@ -162,7 +171,9 @@ export default defineComponent({
             </li>
           </ul>
         </div>
-        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 w-full">
+        <div
+          class="flex flex-wrap items-center justify-between gap-4 py-4 w-full sm:justify-start sm:gap-11"
+        >
           <p class="inline font-semibold">Your numbers:</p>
 
           <div class="flex flex-wrap gap-4">
@@ -194,13 +205,15 @@ export default defineComponent({
             </p>
           </div>
         </div>
-        <button class="rounded-md bg-mito-green" @click="randomizeUserNumbers">
+        <button
+          class="transition-all duration-300 drop-shadow-md hover:drop-shadow-lg rounded-lg bg-gradient-to-r from-mito-green to-mito-yellow hover:to-mito-green text-white text-white font-bold p-3 my-4 active:text-black active:drop-shadow-sm"
+          @click="randomizeUserNumbers"
+        >
           Randomize User's Numbers
         </button>
         <div>
-          <p class="font-semibold">Speed</p>
+          <p class="font-semibold mb-4">Speed</p>
           <input
-            class="transparent w-full cursor-pointer appearance-none rounded-lg border-transparent bg-mito-green"
             type="range"
             id="interval"
             min="10"
@@ -215,16 +228,45 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+$mito-green: #a5d9c8;
+$mito-yellow: #f4f0c6;
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  &:focus {
+    transition: all 5000 ease-in-out;
+    outline: none;
+  }
+}
+
+input[type="range"]::-webkit-slider-runnable-track,
+input[type="range"]::-moz-range-track {
+  background: $mito-green;
+  border-radius: 2rem;
+  height: 1rem;
+}
+
 input[type="range"]::-webkit-slider-thumb,
 input[type="range"]::-moz-range-thumb {
   -webkit-appearance: none;
   -moz-appearance: none;
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   border-radius: 50%;
+  border: none;
   background: whitesmoke;
-  box-shadow: 0 0 2px 0 #555;
-  transition: background 0.3s ease-in-out;
+  box-shadow: 0 0 4px 0 $mito-green;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb,
+input[type="range"]:focus::-moz-range-thumb {
+  border: 1px solid $mito-green;
+  outline: 3px solid $mito-yellow;
+  outline-offset: 0.125rem;
 }
 </style>

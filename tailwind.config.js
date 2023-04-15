@@ -8,6 +8,9 @@ module.exports = {
         'mito-yellow': '#f4f0c6',
         'mint': '#a5d9c8'
       },
+      transitionProperty: {
+        'background': 'background-color, border-color, color',
+      }
     },
   },
   variants: {
