@@ -15,7 +15,8 @@ export default defineComponent({
     let nrOfTickets = ref<number>(0);
     let costOfTickets = ref<number>(0);
     let timeSpent = ref<number>(0);
-    let intervalId = ref<number | undefined>(100);
+    // eslint-disable-next-line no-undef
+    const intervalId = ref<NodeJS.Timeout | undefined>(undefined);
 
     function generateRandomNumbers() {
       const nums: number[] = [];
@@ -65,19 +66,22 @@ export default defineComponent({
       userNumbers.value = nums;
     }
 
-    watch(interval, (newValue, oldValue) => {
-      if (oldValue) {
-        clearInterval(intervalId.value);
-      }
+    function startInterval() {
+      clearInterval(intervalId.value);
+
       intervalId.value = setInterval(() => {
         generateRandomNumbers();
-      }, newValue ?? 100);
+      }, interval.value);
+    }
+
+    watch(interval, () => {
+      startInterval();
     });
 
     onMounted(() => {
-      setInterval(() => {
+      intervalId.value = setInterval(() => {
         generateRandomNumbers();
-      }, 100);
+      }, interval.value);
     });
 
     return {
@@ -209,7 +213,7 @@ export default defineComponent({
           </div>
         </div>
         <button
-          class="transition-all duration-300 drop-shadow-md hover:drop-shadow-lg rounded-lg bg-gradient-to-r from-mito-green to-mito-yellow hover:to-mito-green text-white text-white font-bold p-3 my-4 active:text-black active:drop-shadow-sm"
+          class="transition-all duration-150 drop-shadow-md hover:drop-shadow-lg rounded-lg bg-gradient-to-r from-mito-green to-mito-yellow hover:to-mito-green text-white text-white font-bold p-3 my-4 active:text-black active:drop-shadow-sm"
           @click="randomizeUserNumbers"
         >
           Randomize User's Numbers
